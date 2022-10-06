@@ -1,5 +1,5 @@
 # CS4750-7750-HW4
-### CS 4750 - 7750 Artificial Intelligence I
+### CS 4750 - 7750 Artificial Intelligence I Homework 4
 #### Collaborators
     - Ryan Christopher
     - Olivia Shouse
