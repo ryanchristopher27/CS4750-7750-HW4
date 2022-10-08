@@ -35,6 +35,7 @@ class Node:
 #state = current gameboard
 #xo = whos turn it is
 #plyCount = number of states to search ahead
+#follows psueudocode from slides/book
 def minimaxSearch(state, xo, plyCount):
 
     #root node
@@ -46,16 +47,14 @@ def minimaxSearch(state, xo, plyCount):
 def maxValueSearch(node):
 
     if node.terminal == 0:
-        return utility(node)
+        return (utility(node), node.move)
 
     node.expand()
     largest = -1000
     v = -1000
     move = None
     for child in node.children:
-        #searches the min value of it's children
-        #each child will have children of opponent move, hence passing the opposite for the children's expansion
-        v = minValueSearch(child)
+        v = minValueSearch(child)[0]
         if v > largest:
             v = largest
             move = child.move
@@ -64,14 +63,14 @@ def maxValueSearch(node):
 def minValueSearch(node):
 
     if node.terminal == 0:
-        return utility(node)
+        return (utility(node), node.move)
 
     node.expand()
     smallest = 1000
     v = 1000
     move = None
     for child in node.children:
-        v = maxValueSearch(child)
+        v = maxValueSearch(child)[0]
         if v < smallest:
             v = smallest
             move = child.move
