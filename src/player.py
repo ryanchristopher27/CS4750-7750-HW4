@@ -1,17 +1,13 @@
 # player class
 
-class Player():
+class Player:
 
     # Attributes
         # Moves ahead
         # Player Name
         # Player Symbol
     
-    # Functions
-
     def __init__(self, movesAhead, playerName, playerSymbol):
-        movesAhead = movesAhead
-        playerName = playerName
-        playerSymbol = playerSymbol
-
-    
+        self.movesAhead = movesAhead
+        self.playerName = playerName
+        self.playerSymbol = playerSymbol
