@@ -1,7 +1,7 @@
 # Contains the class of state
 # This is the state of the game board
 
-class State(object):
+# class State(object):
 
     
-    def __init__(self):
+#     def __init__(self):
