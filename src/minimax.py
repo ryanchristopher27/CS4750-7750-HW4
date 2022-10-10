@@ -4,16 +4,15 @@ from board import GameBoard
 
 #node for minimax tree
 class Node:
-    def __init__(self, gameBoard, move, nextTurn, terminal):
+    def __init__(self, gameBoard, move, nextTurn, movesLeft):
         #state is the current board at the moment
         self.state = GameBoard(gameBoard)
         #the move it takes to get to it's state
         self.move = move
         #player who took the turn (X or O)
         self.nextTurn = nextTurn
-        #if the current state is a terminal (too how many moves)
-        #state is terminal if terminal=0
-        self.terminal = terminal
+        #number of moves left (tracking depth)
+        self.movesLeft = movesLeft
         #children nodes (all possible moves from current state)
         self.children = []
 
@@ -28,7 +27,7 @@ class Node:
                     newBoard = GameBoard(self.state)
                     newBoard.board[row][col] = self.nextTurn
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
-                    self.children.append(Node(newBoard, (row, col), self.nextTurn * -1, self.terminal-1))
+                    self.children.append(Node(newBoard, (row, col), self.nextTurn * -1, self.movesLeft-1))
 
         
 #minimax search
@@ -46,7 +45,15 @@ def minimaxSearch(state, xo, plyCount):
 
 def maxValueSearch(node):
 
-    if node.terminal == 0:
+    if node.state.terminal == True:
+        if node.state.winner == node.nextTurn * -1:
+            return 1000
+        elif node.state.winner == node.nextTurn:
+            return -1000
+        else:
+            return 0
+
+    if node.movesLeft == 0:
         return (utility(node), node.move)
 
     node.expand()
@@ -62,7 +69,15 @@ def maxValueSearch(node):
 
 def minValueSearch(node):
 
-    if node.terminal == 0:
+    if node.state.terminal == True:
+        if node.state.winner == node.nextTurn * -1:
+            return -1000
+        elif node.state.winner == node.nextTurn:
+            return 1000
+        else:
+            return 0
+
+    if node.movesLeft == 0:
         return (utility(node), node.move)
 
     node.expand()
