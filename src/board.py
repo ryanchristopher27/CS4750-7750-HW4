@@ -4,6 +4,10 @@ class GameBoard:
 
         self.winner = 0
 
+        self.terminal = False
+
+        self.openMoves = rowCount * colCount
+
         self.rowCount = rowCount
         self.colCount = colCount
         self.board = [[0]*colCount]*rowCount
@@ -48,12 +52,12 @@ class GameBoard:
 
 
     #places an X or O on the board then determines what it means
-    def placeX(self, row, col):
-        self.board[row][col] = 1
-        self.determineMove(1)
-    def placeO(self, row, col):
-        self.board[row][col] = -1
-        self.determineMove(-1)
+    def placeMove(self, row, col, xo):
+        self.board[row][col] = xo
+        self.determineMove(xo)
+        self.openMoves -=1
+        if openMoves <= 0:
+            self.terminal = True
 
     #this determins how many openings are on the board for either X or O player and determines a winner if there is one
     def determineMove(self, xo):
