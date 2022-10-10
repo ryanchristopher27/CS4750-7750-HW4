@@ -1,4 +1,4 @@
-class GameBoard:
+class GameBoard(object):
 
     def __init__(self, rowCount, colCount):
 
@@ -26,36 +26,38 @@ class GameBoard:
         self.oneSideOpen2forO = 0
 
     #second initializer to create one game board from another
-    def __init__(self, gameBoard):
+    # def __init__(self, gameBoard):
 
-        self.winner = gameBoard.winner
+    #     self.winner = gameBoard.winner
 
-        self.rowCount = gameBoard.rowCount
-        self.colCount = gameBoard.colCount
+    #     self.rowCount = gameBoard.rowCount
+    #     self.colCount = gameBoard.colCount
         
-        for row in range(gameBoard.rowCount):
-            for col in range(gameBoard.colCount):
-                self.board[row][col] = gameBoard.board[row][col]
+    #     for row in range(gameBoard.rowCount):
+    #         for col in range(gameBoard.colCount):
+    #             self.board[row][col] = gameBoard.board[row][col]
 
 
-        self.twoSideOpen3forX = gameBoard.twoSideOpen3forX
-        self.twoSideOpen3forO = gameBoard.twoSideOpen3forO
+    #     self.twoSideOpen3forX = gameBoard.twoSideOpen3forX
+    #     self.twoSideOpen3forO = gameBoard.twoSideOpen3forO
 
-        self.oneSideOpen3forX = gameBoard.oneSideOpen3forX
-        self.oneSideOpen3forO = gameBoard.oneSideOpen3forO
+    #     self.oneSideOpen3forX = gameBoard.oneSideOpen3forX
+    #     self.oneSideOpen3forO = gameBoard.oneSideOpen3forO
 
-        self.twoSideOpen2forX = gameBoard.twoSideOpen2forX
-        self.twoSideOpen2forO = gameBoard.twoSideOpen2forO
+    #     self.twoSideOpen2forX = gameBoard.twoSideOpen2forX
+    #     self.twoSideOpen2forO = gameBoard.twoSideOpen2forO
 
-        self.oneSideOpen2forX = gameBoard.oneSideOpen2forX
-        self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
+    #     self.oneSideOpen2forX = gameBoard.oneSideOpen2forX
+    #     self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
 
 
     #places an X or O on the board then determines what it means
     def placeMove(self, row, col, xo):
         self.board[row][col] = xo
         self.determineMove(xo)
-        self.openMoves -=1
+
+        # Decrements total spaces in board and checks if board is full
+        self.openMoves -= 1
         if self.openMoves <= 0:
             self.terminal = True
 
@@ -75,9 +77,9 @@ class GameBoard:
     def checkBounds(self, row, col):
         rowInBounds = False
         colInBounds = False
-        if row < self.rowCount or row >= 0:
+        if row < self.rowCount and row >= 0:
             rowInBounds = True
-        if col < self.colCount or col >=0:
+        if col < self.colCount and col >=0:
             colInBounds = True
         if rowInBounds and colInBounds:
             return True
