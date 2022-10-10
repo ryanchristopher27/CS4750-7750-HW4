@@ -40,7 +40,7 @@ def minimaxSearch(state, xo, plyCount):
     #root node
     #on first expansion will be of turn xo
     root = Node(state, None, xo, plyCount)
-    vMove = maxValueSearch(root)
+    vMove = maxValueSearch(root)[1]
     return vMove #(value, move)
 
 def maxValueSearch(node):
@@ -71,9 +71,9 @@ def minValueSearch(node):
 
     if node.state.terminal == True:
         if node.state.winner == node.nextTurn * -1:
-            return -1000
-        elif node.state.winner == node.nextTurn:
             return 1000
+        elif node.state.winner == node.nextTurn:
+            return -1000
         else:
             return 0
 

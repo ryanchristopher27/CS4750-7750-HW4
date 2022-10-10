@@ -56,7 +56,7 @@ class GameBoard:
         self.board[row][col] = xo
         self.determineMove(xo)
         self.openMoves -=1
-        if openMoves <= 0:
+        if self.openMoves <= 0:
             self.terminal = True
 
     #this determins how many openings are on the board for either X or O player and determines a winner if there is one
