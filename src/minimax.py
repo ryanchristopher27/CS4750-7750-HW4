@@ -6,7 +6,7 @@ from board import GameBoard
 class Node:
     def __init__(self, gameBoard, move, nextTurn, movesLeft):
         #state is the current board at the moment
-        self.state = GameBoard(gameBoard)
+        self.state = gameBoard
         #the move it takes to get to it's state
         self.move = move
         #player who took the turn (X or O)
@@ -102,10 +102,10 @@ def utility(node):
         hn += 20*(gameBoard.twoSideOpen2forX) - 15*(gameBoard.twoSideOpen2forO)
         hn += 5*(gameBoard.oneSideOpen2forX) - 2*(gameBoard.oneSideOpen2forO)
     else:
-        hn += 200*(gameBoard.twoSideOpen3for0) - 80*(gameBoard.twoSideOpen3forX)
-        hn += 150*(gameBoard.oneSideOpen3for0) - 40*(gameBoard.oneSideOpen3forX)
-        hn += 20*(gameBoard.twoSideOpen2for0) - 15*(gameBoard.twoSideOpen2forX)
-        hn += 5*(gameBoard.oneSideOpen2for0) - 2*(gameBoard.oneSideOpen2forX)
+        hn += 200*(gameBoard.twoSideOpen3forO) - 80*(gameBoard.twoSideOpen3forX)
+        hn += 150*(gameBoard.oneSideOpen3forO) - 40*(gameBoard.oneSideOpen3forX)
+        hn += 20*(gameBoard.twoSideOpen2forO) - 15*(gameBoard.twoSideOpen2forX)
+        hn += 5*(gameBoard.oneSideOpen2forO) - 2*(gameBoard.oneSideOpen2forX)
     return hn
 
 
