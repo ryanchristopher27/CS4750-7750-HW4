@@ -10,7 +10,10 @@ class GameBoard(object):
 
         self.rowCount = rowCount
         self.colCount = colCount
-        self.board = [[0]*colCount]*rowCount
+
+        # self.board = [[0]*colCount]*rowCount
+        # Board is now initialized with '-' instead of 0
+        self.board = [['-' for i in range(colCount)] for j in range(rowCount)]
 
         #visible for both players to see -> each player should be able to see the following on the board and not have to calculate it
         self.twoSideOpen3forX = 0
@@ -54,10 +57,12 @@ class GameBoard(object):
     #places an X or O on the board then determines what it means
     def placeMove(self, row, col, xo):
         self.board[row][col] = xo
+        print("Symbol [", xo, "] placed at Row:", row, "Col:", col)
         self.determineMove(xo)
 
         # Decrements total spaces in board and checks if board is full
         self.openMoves -= 1
+        print("Number of open moves:", self.openMoves)
         if self.openMoves <= 0:
             self.terminal = True
 
