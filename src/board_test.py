@@ -6,6 +6,7 @@ from main import test
 def runTests():
     testPlaceMove()
     testCheckBounds()
+    testaddSideOpen()
 
 
 # Tests placeMove function
@@ -49,6 +50,51 @@ def testCheckBounds():
         print("CheckBounds Tests Passed")
 
 
+def testaddSideOpen():
+    testsPassed = True
+    testBoard = GameBoard (5,5)
 
+    testBoard.addSideOpen('x', 2, 1)
+    if(testBoard.oneSideOpen2forX != 1):
+        print("Expected 1 for oneSideOpen2forX, and got ", testBoard.oneSideOpen2forX)
+        testsPassed = False
+    
+    testBoard.addSideOpen('x', 2, 2)
+    if(testBoard.twoSideOpen2forX != 1):
+        print("Expected 1 for twoSideOpen2forX, and got ", testBoard.twoSideOpen2forX)
+        testsPassed = False
+    
+    testBoard.addSideOpen('x', 3, 1)
+    if(testBoard.oneSideOpen3forX != 1):
+        print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
+        testsPassed = False
+
+    testBoard.addSideOpen('x', 3, 2)
+    if(testBoard.twoSideOpen3forX != 1):
+        print("Expected 1 for twoSideOpen3forX, and got ", testBoard.twoSideOpen3forX)
+        testsPassed = False
+
+    testBoard.addSideOpen('o', 2, 1)
+    if(testBoard.oneSideOpen2forO != 1):
+        print("Expected 1 for oneSideOpen2forO, and got ", testBoard.oneSideOpen2forO)
+        testsPassed = False
+    
+    testBoard.addSideOpen('o', 2, 2)
+    if(testBoard.twoSideOpen2forO != 1):
+        print("Expected 1 for twoSideOpen2forO, and got ", testBoard.twoSideOpen2forO)
+        testsPassed = False
+    
+    testBoard.addSideOpen('o', 3, 1)
+    if(testBoard.oneSideOpen3forO != 1):
+        print("Expected 1 for oneSideOpen3forO, and got ", testBoard.oneSideOpen3forO)
+        testsPassed = False
+
+    testBoard.addSideOpen('o', 3, 2)
+    if(testBoard.twoSideOpen3forO != 1):
+        print("Expected 1 for twoSideOpen3forO, and got ", testBoard.twoSideOpen3forO)
+        testsPassed = False
+
+    if testsPassed == True:
+        print("addSideOpen Tests Passed")
 
 runTests()
