@@ -23,7 +23,8 @@ class Node:
         for row in range(self.state.rowCount):
             for col in range(self.state.colCount):
                 #if a space is open in the current state, fill state space, and add that state with that filled space as a child
-                if self.state.board[row][col] == 0:
+                # if self.state.board[row][col] == 0:
+                if self.state.board[row][col] == "-":
                     newBoard = GameBoard(self.state)
                     newBoard.board[row][col] = self.nextTurn
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
@@ -46,10 +47,12 @@ def minimaxSearch(state, xo, plyCount):
 def maxValueSearch(node):
 
     if node.state.terminal == True:
-        if node.state.winner == node.nextTurn * -1:
-            return 1000
-        elif node.state.winner == node.nextTurn:
-            return -1000
+        if node.state.winner == "x" or node.state.winner == "o":
+            if node.state.winner != node.nextTurn:
+            # if node.state.winner == node.nextTurn * -1:
+                return -1000
+            elif node.state.winner == node.nextTurn:
+                return 1000
         else:
             return 0
 
@@ -70,10 +73,12 @@ def maxValueSearch(node):
 def minValueSearch(node):
 
     if node.state.terminal == True:
-        if node.state.winner == node.nextTurn * -1:
-            return -1000
-        elif node.state.winner == node.nextTurn:
-            return 1000
+        if node.state.winner == "x" or node.state.winner == "o":
+            if node.state.winner != node.nextTurn:
+            # if node.state.winner == node.nextTurn * -1:
+                return -1000
+            elif node.state.winner == node.nextTurn:
+                return 1000
         else:
             return 0
 
@@ -94,9 +99,14 @@ def minValueSearch(node):
 #calculates the hueristic using a gameboard and who is interested (X or O)
 def utility(node):
     gameBoard = node.state
-    xo = node.nextTurn * -1
+    # xo = node.nextTurn * -1
+    xo = "x"
+    if node.nextTurn == "x":
+        xo = "o"
+
     hn = 0
-    if xo == 1:
+    # if xo == 1:
+    if xo == "x":
         hn += 200*(gameBoard.twoSideOpen3forX) - 80*(gameBoard.twoSideOpen3forO)
         hn += 150*(gameBoard.oneSideOpen3forX) - 40*(gameBoard.oneSideOpen3forO)
         hn += 20*(gameBoard.twoSideOpen2forX) - 15*(gameBoard.twoSideOpen2forO)

@@ -53,6 +53,10 @@ class GameBoard(object):
     #     self.oneSideOpen2forX = gameBoard.oneSideOpen2forX
     #     self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
 
+    def printBoard(self):
+        print("--- Current Game Board ---")
+        for row in self.board:
+            print(row)
 
     #places an X or O on the board then determines what it means
     def placeMove(self, row, col, xo):
@@ -96,7 +100,8 @@ class GameBoard(object):
     #helper function for changeOpenings()
     def addSideOpen(self, xo, numConsec, oneOrTwo):
         #if player X
-        if xo == 'x':
+        # if xo == 1:
+        if xo == "x":
             #if two consecutive X's
             if numConsec == 2:
                 #if one open side
@@ -176,7 +181,8 @@ class GameBoard(object):
 
                     #check behind the consecutive pattern to see if it is open
                     if self.checkBounds(row, col - numConsec):
-                        if self.board[row][col - numConsec] == 0:
+                        # if self.board[row][col - numConsec] == 0:
+                        if self.board[row][col - numConsec] == "-":
                             leftOpen = True
 
                     #if the next box isn't of matching type (if the pattern doesn't continue) mark it down
@@ -217,11 +223,13 @@ class GameBoard(object):
                     if self.checkBounds(row + 1, col):
                         if self.board[row+1][col] == xo:
                             keepsGoing == True
-                        elif self.board[row + 1][col] == 0:
+                        # elif self.board[row + 1][col] == 0:
+                        elif self.board[row + 1][col] == "-":
                             bottomOpen = True
 
                     if self.checkBounds(row - numConsec, col):
-                        if self.board[row - numConsec][col] == 0:
+                        # if self.board[row - numConsec][col] == 0:
+                        if self.board[row - numConsec][col] == "-":
                             topOpen = True
 
                     if keepsGoing == False:
@@ -251,11 +259,13 @@ class GameBoard(object):
                     if self.checkBounds(i+1, i+1):
                         if self.board[i+1][i+1] == xo:
                             keepsGoing = True
-                        elif self.board[i + 1][i + 1] == 0:
+                        # elif self.board[i + 1][i + 1] == 0:
+                        elif self.board[i + 1][i + 1] == "-":
                             rightOpen = True
 
                     if self.checkBounds(i - numConsec, i - numConsec):
-                        if self.board[i - numConsec][i - numConsec] == 0:
+                        # if self.board[i - numConsec][i - numConsec] == 0:
+                        if self.board[i - numConsec][i - numConsec] == "-":
                             leftOpen = True
 
                     if keepsGoing == False:
@@ -287,11 +297,13 @@ class GameBoard(object):
                     if self.checkBounds(j-1, i+1):
                         if self.board[j-1][i+1] == xo:
                             keepsGoing = True
-                        elif self.board[j-1][i+1] == 0:
+                        # elif self.board[j-1][i+1] == 0:
+                        elif self.board[j-1][i+1] == "-":
                             rightOpen = True
 
                     if self.checkBounds(j + numConsec, i - numConsec):
-                        if self.board[j + numConsec][i - numConsec] == 0:
+                        # if self.board[j + numConsec][i - numConsec] == 0:
+                        if self.board[j + numConsec][i - numConsec] == "-":
                             leftOpen = True
 
                     if keepsGoing == False:
