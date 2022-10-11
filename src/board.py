@@ -96,7 +96,7 @@ class GameBoard(object):
     #helper function for changeOpenings()
     def addSideOpen(self, xo, numConsec, oneOrTwo):
         #if player X
-        if xo == 1:
+        if xo == 'x':
             #if two consecutive X's
             if numConsec == 2:
                 #if one open side
