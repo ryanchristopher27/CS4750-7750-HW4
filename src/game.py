@@ -26,10 +26,10 @@ class Game():
         self.gameboard = GameBoard(boardRowSize, boardColSize)
         
         # set player 1
-        self.player1 = Player(p1MovesAhead, "Player 1", -1)
+        self.player1 = Player(p1MovesAhead, "Player 1", 1)
 
         # set player 2
-        self.player2 = Player(p2MovesAhead, "Player 2", 0)
+        self.player2 = Player(p2MovesAhead, "Player 2", -1)
             
 
     #getters and setters
@@ -47,6 +47,12 @@ class Game():
     
     def addMoveSequence(self, nextMove):
         self.moveSequence.append(nextMove)
+
+    def printBoard(self):
+        print("--- Current Game Board ---")
+        for row in self.gameboard.board:
+            print(row)
+
 
 
     #logic functions 
@@ -73,4 +79,9 @@ class Game():
 
 game1 = Game(0,0, 5, 4)
 print("Hello")
-game1.playGame()
+game1.printBoard()
+game1.gameboard.placeMove(1, 2, "x")
+game1.printBoard()
+game1.gameboard.placeMove(2, 1, "o")
+game1.printBoard()
+# game1.playGame()
