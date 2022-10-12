@@ -71,12 +71,12 @@ class GameBoard(object):
     #places an X or O on the board then determines what it means
     def placeMove(self, row, col, xo):
         self.board[row][col] = xo
-        print("Symbol [", xo, "] placed at Row:", row, "Col:", col)
+        # print("Symbol [", xo, "] placed at Row:", row, "Col:", col)
         self.determineMove(xo)
 
         # Decrements total spaces in board and checks if board is full
         self.openMoves -= 1
-        print("Number of open moves:", self.openMoves)
+        # print("Number of open moves:", self.openMoves)
         if self.openMoves <= 0:
             self.terminal = True
 
