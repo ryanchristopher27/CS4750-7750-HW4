@@ -4,11 +4,11 @@ from board import GameBoard
 from main import test
 
 def runTests():
-    testPlaceMove()
-    testCheckBounds()
-    testaddSideOpen()
+    # testPlaceMove()
+    # testCheckBounds()
+    # testaddSideOpen()
     testCheckRow()
-    testCheckCol()
+    # testCheckCol()
 
 
 # Tests placeMove function
@@ -106,26 +106,28 @@ def testCheckRow():
     #generic test
     testBoard.placeMove(4,2, 'x')
     testBoard.placeMove(4,3, 'x')
-    testBoard.checkRow('x')
+    # testBoard.checkRow('x')
+    testBoard.printBoard()
     if(testBoard.twoSideOpen2forX != 1):
         print("Expected 1 for twoSideOpen2forX, and got ", testBoard.twoSideOpen2forX)
-        testPassed = False
+        testsPassed = False
 
     #right edge case
     testBoard.placeMove(4,4, 'x')
-    testBoard.reset()
+    testBoard.clearSideOpens()
     testBoard.checkRow('x')
+    testBoard.printBoard()
     if(testBoard.oneSideOpen3forX != 1):
         print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
-        testPassed = False
+        testsPassed = False
     
     #check winnder
     testBoard.placeMove(4,1, 'x')
     testBoard.checkRow('x')
-    testBoard.reset()
+    testBoard.clearSideOpens()
     if(testBoard.winner != 'x'):
         print("Expected 'x' as winner and got", testBoard.winner)
-        testPassed = False
+        testsPassed = False
 
     #left edge case
     testBoard.placeMove(4, 0, 'x')
@@ -133,11 +135,11 @@ def testCheckRow():
     testBoard.checkRow('x')
     if(testBoard.oneSideOpen3forX != 1):
         print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
-        testPassed = False
+        testsPassed = False
 
     if(testsPassed == True):
         print("checkRow Tests Passed")
-        testPassed = False
+        testsPassed = False
 
 def testCheckCol():
     testsPassed = True
@@ -145,27 +147,28 @@ def testCheckCol():
     #generic test
     testBoard.placeMove(2,4, 'x')
     testBoard.placeMove(3,4, 'x')
-    # testBoard.printBoard()
-    # testBoard.checkCol('x')
-    # if(testBoard.twoSideOpen2forX != 1):
-    #     print("Expected 1 for twoSideOpen2forX, and got ", testBoard.twoSideOpen2forX)
-    #     testPassed = False
+    testBoard.printBoard()
+    testBoard.checkCol('x')
+    if(testBoard.twoSideOpen2forX != 1):
+        print("Expected 1 for twoSideOpen2forX, and got ", testBoard.twoSideOpen2forX)
+        testsPassed = False
 
     #down edge case
     testBoard.placeMove(4,4, 'x')
-    # testBoard.reset()
-    # testBoard.checkCol('x')
-    # if(testBoard.oneSideOpen3forX != 1):
-    #     print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
-    #     testPassed = False
+    testBoard.clearSideOpens()
+    testBoard.checkCol('x')
+    if(testBoard.oneSideOpen3forX != 1):
+        print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
+        testsPassed = False
     
-    #check winnder
+    #check winner
     testBoard.placeMove(1,4, 'x')
-    # testBoard.checkCol('x')
-    # testBoard.reset()
-    # if(testBoard.winner != 'x'):
-    #     print("Expected 'x' as winner and got", testBoard.winner)
-    #     testPassed = False
+    testBoard.checkCol('x')
+    testBoard.clearSideOpens()
+    if(testBoard.winner != 'x'):
+        print("Expected 'x' as winner and got", testBoard.winner)
+        testsPassed = False
+
     #top edge case
     testBoard.placeMove(0, 4, 'x')
     testBoard.placeMove(3, 4, '-')
@@ -174,7 +177,7 @@ def testCheckCol():
 
     if(testBoard.oneSideOpen3forX != 1):
         print("Expected 1 for oneSideOpen3forX, and got ", testBoard.oneSideOpen3forX)
-        testPassed = False
+        testsPassed = False
     # testBoard.placeMove(4, 4, '-')
     print("testBoard.oneSideOpen3forX", testBoard.oneSideOpen3forX)
     print("testBoard.oneSideOpen2forX", testBoard.oneSideOpen2forX)

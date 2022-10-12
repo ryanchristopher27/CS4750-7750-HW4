@@ -4,13 +4,13 @@ from board import GameBoard
 
 #node for minimax tree
 class Node:
-    def __init__(self, gameBoard, move, nextTurn, movesLeft):
+    def __init__(self, gameBoard, move, currentPlayer, movesLeft):
         #state is the current board at the moment
         self.state = gameBoard
         #the move it takes to get to it's state
         self.move = move
         #player who took the turn (X or O)
-        self.nextTurn = nextTurn
+        self.currentPlayer = currentPlayer
         #number of moves left (tracking depth)
         self.movesLeft = movesLeft
         #children nodes (all possible moves from current state)
@@ -26,9 +26,9 @@ class Node:
                 # if self.state.board[row][col] == 0:
                 if self.state.board[row][col] == "-":
                     newBoard = GameBoard(self.state)
-                    newBoard.board[row][col] = self.nextTurn
+                    newBoard.board[row][col] = self.currentPlayer
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
-                    self.children.append(Node(newBoard, (row, col), self.nextTurn * -1, self.movesLeft-1))
+                    self.children.append(Node(newBoard, (row, col), self.currentPlayer * -1, self.movesLeft-1))
 
         
 #minimax search
@@ -100,13 +100,14 @@ def minValueSearch(node):
 def utility(node):
     gameBoard = node.state
     # xo = node.nextTurn * -1
-    xo = "x"
-    if node.nextTurn == "x":
-        xo = "o"
+    # xo = "x"
+    # if node.currentPlayer == "x":
+    #     xo = "o"
 
     hn = 0
     # if xo == 1:
-    if xo == "x":
+    # if xo == "x":
+    if node.currentPlayer == "x":
         hn += 200*(gameBoard.twoSideOpen3forX) - 80*(gameBoard.twoSideOpen3forO)
         hn += 150*(gameBoard.oneSideOpen3forX) - 40*(gameBoard.oneSideOpen3forO)
         hn += 20*(gameBoard.twoSideOpen2forX) - 15*(gameBoard.twoSideOpen2forO)

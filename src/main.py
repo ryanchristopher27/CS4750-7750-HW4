@@ -16,7 +16,7 @@ def main():
 def test():
     testBoard = GameBoard(5, 6)
     # player1 = Player(2, "Player 1", "x")
-    testBoard.placeMove(0, 0, "x")
+    # testBoard.placeMove(0, 0, "x")
 
 
 main()
