@@ -68,6 +68,8 @@ class GameBoard(object):
         self.oneSideOpen2forX = 0
         self.oneSideOpen2forO = 0
 
+    def resetMove(self, row, col):
+        self.board[row][col] = '-'
     #places an X or O on the board then determines what it means
     def placeMove(self, row, col, xo):
         self.board[row][col] = xo
@@ -168,93 +170,51 @@ class GameBoard(object):
         #determines if the right side (or south side) of the pattern is open
         rightOpen = False
 
-        for rowNum, row in  enumerate(self.board):
-            for colNum, col in enumerate(row):
-                # print(rowNum, row, colNum, col)
-                if col == xo:
+
+        #checking row by row for horizontal patterns
+        for row in range(self.rowCount):
+            leftOpen = False
+            #walking through the row
+            for col in range(self.colCount):
+
+                #if the pattern matches
+                if self.board[row][col] == xo:
                     numConsec += 1
                 else:
                     numConsec = 0
-                    
-                if numConsec == 4:
-                    self.winner = xo 
+
+                if numConsec >= 4:
+                    self.winner = xo
                     return
-                
-                if numConsec >= 2 and numConsec < 4:
-                        
-                    #check legal bounds to continue right
-                    if(self.checkBounds(rowNum, colNum +1)):
-                        if(row[colNum + 1] != xo):
-                            keepsGoing = False
-                            #check if right is open
-                            if(row[colNum +1] == '-'):
-                                rightOpen = True
-                    else:
-                        #takes care of edge cases 
-                        keepsGoing = False
-                            
-                     #check legal bounds to continue left 
-                    if(self.checkBounds(rowNum, colNum - numConsec - 1)):
-                        #check if left is open
-                        if(row[colNum - numConsec - 1] == '-'):
-                            leftOpen = True
-        
-                    if keepsGoing == False:
-                        #if the left and right are open, then two sided open
-                        if rightOpen and leftOpen:
-                            self.addSideOpen(xo, numConsec, 2)
-                        
-                        #else if just the left or just the right, then it is one sided open
-                        elif rightOpen or leftOpen:
-                            self.addSideOpen(xo, numConsec, 1)
 
+                #if there is a pattern
+                if numConsec >= 2:
                     
-
-        # #checking row by row for horizontal patterns
-        # for row in range(self.rowCount):
-
-        #     #walking through the row
-        #     for col in range(self.colCount):
-
-        #         #if the pattern matches
-        #         if self.board[row][col] == xo:
-        #             numConsec += 1
-        #             print(numConsec, "num Consec")
-        #         # else:
-        #         #     numConsec = 0
-
-        #         #if the number of consecutive X's or O's in a pattern is 4, then they are a winner
-        #         if numConsec >= 4:
-        #             self.winner = xo
-        #             return
-
-        #         #if there is a pattern
-        #         if numConsec >= 2:
-                    
-        #             #if bounds are legal, check them
-        #             if self.checkBounds(row, col + 1):
+                    #if bounds are legal, check them
+                    if self.checkBounds(row, col + 1):
 
                         #if the next box is of matching pattern, do not count this as a 2 or 3 in a row...yet
-                        if self.board[row][col+1] == xo:
-                            keepsGoing = True
-                        else:
+                        if self.board[row][col+1] != xo:
                             keepsGoing = False
                             #check the next box. If it is open, then mark it
                             if self.board[row][col + 1] == "-":
                                 rightOpen = True
+                    
+                    else:
+                        #takes care of edge cases
+                        keepsGoing = False 
 
-                            #check behind the consecutive pattern to see if it is open
-                            if self.checkBounds(row, col - numConsec):
-                                # if self.board[row][col - numConsec] == 0:
-                                if self.board[row][col - numConsec] == "-":
-                                    leftOpen = True
+                    #check behind the consecutive pattern to see if it is open
+                    if self.checkBounds(row, col - numConsec):
+                        if self.board[row][col - numConsec] == "-":
+                            leftOpen = True
 
-        #             #if the next box isn't of matching type (if the pattern doesn't continue) mark it down
-        #             if keepsGoing == False:
+                    #if the next box isn't of matching type (if the pattern doesn't continue) mark it down
+                    if keepsGoing == False:
 
-        #                 #if the left and right are open, then two sided open
-        #                 if rightOpen and leftOpen:
-        #                     self.addSideOpen(xo, numConsec, 2)
+                        #if the left and right are open, then two sided open
+                        if rightOpen and leftOpen:
+                            self.addSideOpen(xo, numConsec, 2)
                         
                         #else if just the left or just the right, then it is one sided open
                         elif rightOpen or leftOpen:
@@ -270,69 +230,37 @@ class GameBoard(object):
 
 #see checkRow() for more detailed comments
     def checkCol(self, xo):
-        keepsGoing = False
+        keepsGoing = True
         numConsec = 0
-        leftOpen = False
-        rightOpen = False
+        topOpen = False
+        bottomOpen = False
         #checking column by column for vertical patterns
-        for colNum in range(self.colCount):
-            col = [val[colNum] for val in self.board]
-            print(col)
-            # for rowNum, row in enumerate(col):
-             
-            #     # now treated like checkRow because the col are in row formation
-            #     if row == xo:
-            #         numConsec += 1
-            #     else:
-            #         numConsec = 0
-                    
-            #     if numConsec == 4:
-            #         self.winner = xo 
-            #         return
-                
-            #     if numConsec >= 2 and numConsec < 4:
-                        
-            #         #check legal bounds to continue right
-            #         if(self.checkBounds(colNum, rowNum+1)):
-            #             if(col[rowNum + 1] != xo):
-            #                 keepsGoing = False
-            #                 #check if right is open
-            #                 if(col[rowNum +1] == '-'):
-            #                     rightOpen = True
-            #         else:
-            #             #takes care of edge cases 
-            #             keepsGoing = False
-            #             #check legal bounds to continue left 
-            #         if(self.checkBounds(colNum, rowNum - numConsec - 1)):
-            #             #check if left is open
-            #             if(col[rowNum - numConsec - 1] == '-'):
-            #                 leftOpen = True
-        
-            #         if keepsGoing == False:
-            #             #if the left and right are open, then two sided open
-            #             if rightOpen and leftOpen:
-            #                 self.addSideOpen(xo, numConsec, 2)
-                        
-            #             #else if just the left or just the right, then it is one sided open
-            #             elif rightOpen or leftOpen:
-            #                 self.addSideOpen(xo, numConsec, 1)
+        for col in range(self.colCount):
+            topOpen = False
+            for row in range(self.rowCount):
 
-            # col = row[col] for row in self.board
+                if self.board[row][col] == xo:
+                    numConsec += 1
+                else:
+                   numConsec = 0
+
+                if numConsec >= 4:
+                    self.winner = xo
+                    return 
 
                 if numConsec >= 2:
                     if self.checkBounds(row + 1, col):
-                        if self.board[row+1][col] == xo:
-                            keepsGoing = True
-                        else:
+                        if self.board[row+1][col] != xo:
                             keepsGoing = False
                             # elif self.board[row + 1][col] == 0:
                             if self.board[row + 1][col] == "-":
                                 bottomOpen = True
+                    else: 
+                        keepsGoing = False
 
-                            if self.checkBounds(row - numConsec, col):
-                                # if self.board[row - numConsec][col] == 0:
-                                if self.board[row - numConsec][col] == "-":
-                                    topOpen = True
+                    if self.checkBounds(row - numConsec, col):
+                        if self.board[row - numConsec][col] == "-":
+                            topOpen = True
 
                     if keepsGoing == False:
                         if topOpen and bottomOpen:
@@ -341,85 +269,6 @@ class GameBoard(object):
                             self.addSideOpen(xo, numConsec, 1)
                         numConsec = 0
             numConsec = 0
-
-#see checkRow() for more detailed comments
-#     def checkDiag1(self, xo):
-#         keepsGoing = False
-#         numConsec = 0
-#         leftOpen = False
-#         rightOpen = False
-#         #checking for diagnal patterns top left to bottom right
-#         for row in range(self.rowCount):
-#             for i in range(row, self.rowCount if self.rowCount > self.colCount else self.colCount):
-
-#                 if self.board[i][i] == xo:
-#                     numConsec += 1
-
-#                 if numConsec >= 4:
-#                     self.winner = xo
-#                     return
-
-#                 if numConsec >= 2:
-#                     if self.checkBounds(i+1, i+1):
-#                         if self.board[i+1][i+1] == xo:
-#                             keepsGoing = True
-#                         # elif self.board[i + 1][i + 1] == 0:
-#                         elif self.board[i + 1][i + 1] == "-":
-#                             rightOpen = True
-
-#                     if self.checkBounds(i - numConsec, i - numConsec):
-#                         # if self.board[i - numConsec][i - numConsec] == 0:
-#                         if self.board[i - numConsec][i - numConsec] == "-":
-#                             leftOpen = True
-
-#                     if keepsGoing == False:
-#                         if rightOpen and leftOpen:
-#                             self.addSideOpen(xo, numConsec, 2)
-#                         elif rightOpen or leftOpen:
-#                             self.addSideOpen(xo, numConsec, 1)
-#                         numConsec = 0
-#             numConsec = 0
-            
-# #see checkRow() for more detailed comments
-#     def checkDiag2(self, xo):
-#         keepsGoing = False
-#         numConsec = 0
-#         leftOpen = False
-#         rightOpen = False
-#         #checking for horizontal patterns bottom left to top right
-#         for row in range(self.rowCount):
-#             for i in range(row, self.rowCount if self.rowCount > self.colCount else self.colCount):
-
-#                 #starting at the bottom of the row
-#                 j = self.rowCount-1 - i
-#                 if self.board[j][i] == xo:
-#                     numConsec += 1
-
-#                 if numConsec >= 4:
-#                     self.winner = xo
-#                     return
-
-#                 if numConsec >= 2:
-#                     if self.checkBounds(j-1, i+1):
-#                         if self.board[j-1][i+1] == xo:
-#                             keepsGoing = True
-#                         # elif self.board[j-1][i+1] == 0:
-#                         elif self.board[j-1][i+1] == "-":
-#                             rightOpen = True
-
-#                     if self.checkBounds(j + numConsec, i - numConsec):
-#                         # if self.board[j + numConsec][i - numConsec] == 0:
-#                         if self.board[j + numConsec][i - numConsec] == "-":
-#                             leftOpen = True
-
-#                     if keepsGoing == False:
-#                         if rightOpen and leftOpen:
-#                             self.addSideOpen(xo, numConsec, 2)
-#                         elif rightOpen or leftOpen:
-#                             self.addSideOpen(xo, numConsec, 1)
-#                         numConsec = 0
-#             numConsec = 0
-        
 
     # Checks top-left half from bottom left to top right for each possible diagonal
     def newDiag1Check(self, xo):
