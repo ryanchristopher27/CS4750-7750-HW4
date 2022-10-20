@@ -29,29 +29,29 @@ class GameBoard(object):
         self.oneSideOpen2forO = 0
 
     #second initializer to create one game board from another
-    # def __init__(self, gameBoard):
+    def setNewBoard(self, gameBoard):
 
-    #     self.winner = gameBoard.winner
+        self.winner = gameBoard.winner
 
-    #     self.rowCount = gameBoard.rowCount
-    #     self.colCount = gameBoard.colCount
+        self.rowCount = gameBoard.rowCount
+        self.colCount = gameBoard.colCount
         
-    #     for row in range(gameBoard.rowCount):
-    #         for col in range(gameBoard.colCount):
-    #             self.board[row][col] = gameBoard.board[row][col]
+        for row in range(gameBoard.rowCount):
+            for col in range(gameBoard.colCount):
+                self.board[row][col] = gameBoard.board[row][col]
 
 
-    #     self.twoSideOpen3forX = gameBoard.twoSideOpen3forX
-    #     self.twoSideOpen3forO = gameBoard.twoSideOpen3forO
+        self.twoSideOpen3forX = gameBoard.twoSideOpen3forX
+        self.twoSideOpen3forO = gameBoard.twoSideOpen3forO
 
-    #     self.oneSideOpen3forX = gameBoard.oneSideOpen3forX
-    #     self.oneSideOpen3forO = gameBoard.oneSideOpen3forO
+        self.oneSideOpen3forX = gameBoard.oneSideOpen3forX
+        self.oneSideOpen3forO = gameBoard.oneSideOpen3forO
 
-    #     self.twoSideOpen2forX = gameBoard.twoSideOpen2forX
-    #     self.twoSideOpen2forO = gameBoard.twoSideOpen2forO
+        self.twoSideOpen2forX = gameBoard.twoSideOpen2forX
+        self.twoSideOpen2forO = gameBoard.twoSideOpen2forO
 
-    #     self.oneSideOpen2forX = gameBoard.oneSideOpen2forX
-    #     self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
+        self.oneSideOpen2forX = gameBoard.oneSideOpen2forX
+        self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
 
     def printBoard(self):
         print("--- Current Game Board ---")
@@ -323,7 +323,7 @@ class GameBoard(object):
         leftDownOpen = False
         rightUpOpen = False
 
-        for colCount in range(1, self.colCount - 3):
+        for colCount in range(1, self.colCount - 2):
 
             col = colCount
             row = self.rowCount - 1
@@ -370,7 +370,7 @@ class GameBoard(object):
         leftUpOpen = False
         rightDownOpen = False
 
-        for rowCount in range(self.rowCount - 3):
+        for rowCount in range(self.rowCount - 1):
 
             col = 0
             row = rowCount
@@ -418,7 +418,7 @@ class GameBoard(object):
         leftUpOpen = False
         rightDownOpen = False
 
-        for colCount in range(1, self.colCount - 3):
+        for colCount in range(1, self.colCount - 2):
 
             col = colCount
             row = 0
