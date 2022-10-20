@@ -117,14 +117,15 @@ def tieBreakMoves(moves):
             smallestCol = move[1]
 
     bestMove = ()
+    bestMove = smallestCols[0]
     if len(smallestCols) > 1:
         bestMove = smallestCols[0]
         smallestRow = smallestCols[0][0]
         for i in smallestCols:
             if i[0] < smallestRow:
                 bestMove = i
-    else:
-        bestMove = smallestCols
+    # else:
+    #     bestMove = smallestCols
 
     return bestMove
     
@@ -141,7 +142,7 @@ def minimaxSearch(state, xo, plyCount):
     #on first expansion will be of turn xo
     root = Node(state, None, xo, plyCount)
     vMove = maxValueSearch(root)
-    # state.placeMove(vMove[1][0], vMove[1][1], xo)
+    state.placeMove(vMove[1][0], vMove[1][1], xo)
     # return (vMove[0], vMove[1].move)
     return vMove #(value, move)
 

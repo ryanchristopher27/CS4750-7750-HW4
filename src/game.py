@@ -62,7 +62,9 @@ class Game():
         while(self.gameboard.terminal == False):
             # may have to check after each player moves if terminal is true. 
             self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
+            self.gameboard.printBoard()
             self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
+            self.gameboard.printBoard()
             #print(self.moveSequence)
 
         if(self.gameboard.winner == -1):
