@@ -29,7 +29,7 @@ class Game():
         self.player1 = Player(p1MovesAhead, "Player 1", "x")
 
         # set player 2
-        self.player2 = Player(p2MovesAhead, "Player 2", "y")
+        self.player2 = Player(p2MovesAhead, "Player 2", "o")
             
 
     #getters and setters
@@ -77,7 +77,7 @@ class Game():
         else:
             print("Something went wrong")
 
-game1 = Game(0,0, 5, 4)
+game1 = Game(1,1, 5, 4)
 print("Hello")
 game1.gameboard.printBoard()
 game1.gameboard.placeMove(1, 2, "x")

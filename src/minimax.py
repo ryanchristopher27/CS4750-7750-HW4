@@ -16,6 +16,73 @@ class Node:
         #children nodes (all possible moves from current state)
         self.children = []
 
+
+    # returns col location 
+    def checkPieceNextToColCheck(self, col):
+        # col value is not on either side
+        if col != 0 and col != self.state.colCount - 1:
+            return "mid"
+        # col value is on right side
+        elif col == 0:
+            return "left"
+        # col value is on left side
+        else:
+            return "right"
+
+    # returns row location
+    def checkPieceNextToRowCheck(self, row):
+        # row value is not on top or bottom
+        if row != 0 and row != self.state.rowCount - 1:
+            return "mid"
+        # row value is on top
+        elif row == 0:
+            return "top"
+        # row value is on bottom
+        else:
+            return "bot"
+
+    # Check all possible 8 boxes around current location if there is a piece placed next to it
+    def hasPieceNextTo(self, row, col):
+        # checks if row is not on top or bottom row
+        rowLoc = self.checkPieceNextToRowCheck(row)
+        colLoc = self.checkPieceNextToColCheck(col)
+
+        # top left
+        if rowLoc != "top" and colLoc != "left":
+            if self.state.board[row-1][col-1] != "-":
+                return True
+        # top mid
+        if rowLoc != "top":
+            if self.state.board[row-1][col] != "-":
+                return True
+        # top right
+        if rowLoc != "top" and colLoc != "right":
+            if self.state.board[row-1][col+1] != "-":
+                return True
+        # middle left
+        if colLoc != "left":
+            if self.state.board[row][col-1] != "-":
+                return True
+        # middle right
+        if colLoc != "right":
+            if self.state.board[row][col+1] != "-":
+                return True
+        # bottom left
+        if rowLoc != "bot" and colLoc != "left":
+            if self.state.board[row+1][col-1] != "-":
+                return True
+        # bottom middle
+        if rowLoc != "bot":
+            if self.state.board[row+1][col] != "-":
+                return True
+        # bottom right
+        if rowLoc != "bot" and colLoc != "right":
+            if self.state.board[row+1][col+1] != "-":
+                return True
+
+        return False
+
+
     #adds the children of the node
     def expand(self):
         #for every open slot in the current state, there is a move that is available for X or O
@@ -24,11 +91,43 @@ class Node:
             for col in range(self.state.colCount):
                 #if a space is open in the current state, fill state space, and add that state with that filled space as a child
                 # if self.state.board[row][col] == 0:
-                if self.state.board[row][col] == "-":
-                    newBoard = GameBoard(self.state)
+                if self.hasPieceNextTo(row, col) and self.state.board[row][col] == "-":
+                    newBoard = GameBoard(self.state.rowCount, self.state.colCount)
+                    newBoard.setNewBoard(self.state)
+                    # newBoard = GameBoard(self.state)
                     newBoard.board[row][col] = self.currentPlayer
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
-                    self.children.append(Node(newBoard, (row, col), self.currentPlayer * -1, self.movesLeft-1))
+                    if self.currentPlayer == "x":
+                        self.children.append(Node(newBoard, (row, col), "o", self.movesLeft-1))
+                    else:
+                        self.children.append(Node(newBoard, (row, col), "x", self.movesLeft-1))   
+
+# smallest col and then smallest row
+# gets all moves with same score and breaks the tie
+# function works
+def tieBreakMoves(moves):
+    smallestCols = []
+    smallestCol = moves[0][1]
+    for move in moves:
+        if move[1] == smallestCol:
+            smallestCols.append(move)
+        elif move[1] < smallestCol:
+            smallestCols.clear()
+            smallestCols.append(move)
+            smallestCol = move[1]
+
+    bestMove = ()
+    if len(smallestCols) > 1:
+        bestMove = smallestCols[0]
+        smallestRow = smallestCols[0][0]
+        for i in smallestCols:
+            if i[0] < smallestRow:
+                bestMove = i
+    else:
+        bestMove = smallestCols
+
+    return bestMove
+    
 
         
 #minimax search
@@ -42,6 +141,8 @@ def minimaxSearch(state, xo, plyCount):
     #on first expansion will be of turn xo
     root = Node(state, None, xo, plyCount)
     vMove = maxValueSearch(root)
+    # state.placeMove(vMove[1][0], vMove[1][1], xo)
+    # return (vMove[0], vMove[1].move)
     return vMove #(value, move)
 
 def maxValueSearch(node):
@@ -62,13 +163,30 @@ def maxValueSearch(node):
     node.expand()
     largest = -1000
     v = -1000
+    moves = []
     move = None
     for child in node.children:
         v = minValueSearch(child)[0]
-        if v > largest:
+        # child.state.determineMove(child.currentPlayer)
+        # v = utility(child.state)
+        # v = maxValueSearch(child.state)
+        # if v > largest:
+        #     v = largest
+        #     move = child.move
+            # move = child
+
+        if v >= largest:
             v = largest
-            move = child.move
+            moves.append(child.move)
+
+    # tie break all moves with smallest value
+    if len(moves) > 1:
+        move = tieBreakMoves(moves)
+    else:
+        move = moves
+
     return (v, move)
+    # return (v, child)
 
 def minValueSearch(node):
 
@@ -89,16 +207,30 @@ def minValueSearch(node):
     smallest = 1000
     v = 1000
     move = None
+    moves = []
     for child in node.children:
         v = maxValueSearch(child)[0]
-        if v < smallest:
+        # child.state.determineMove(child.currentPlayer)
+        # v = utility(maxValueSearch(child.state))
+        # if v < smallest:
+        #     v = smallest
+        #     move = child.move
+        if v <= smallest:
             v = smallest
-            move = child.move
+            moves.append(child.move)
+
+    # tie break all moves with smallest value
+    if len(moves) > 1:
+        move = tieBreakMoves(moves)
+    else:
+        move = moves
+
     return (v, move)
 
 #calculates the hueristic using a gameboard and who is interested (X or O)
 def utility(node):
     gameBoard = node.state
+    gameBoard.determineMove(node.currentPlayer)
     # xo = node.nextTurn * -1
     # xo = "x"
     # if node.currentPlayer == "x":
