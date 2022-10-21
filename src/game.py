@@ -21,15 +21,21 @@ class Game():
         # Print Sequence
     moveSequence = []
 
-    def __init__(self, p1MovesAhead, p2MovesAhead, boardRowSize, boardColSize):
+    def __init__(self, p1MovesAhead, p2MovesAhead, p1FirstMove, p2FirstMove, boardRowSize, boardColSize):
         # generate board    
+        print(boardRowSize, " ", boardColSize)
         self.gameboard = GameBoard(boardRowSize, boardColSize)
         
         # set player 1
-        self.player1 = Player(p1MovesAhead, "Player 1", "x")
+        self.player1 = Player(p1MovesAhead, "Player 1", "x", p1FirstMove)
 
         # set player 2
-        self.player2 = Player(p2MovesAhead, "Player 2", "o")
+        self.player2 = Player(p2MovesAhead, "Player 2", "o", p2FirstMove)
+        
+        #place the moves
+        self.gameboard.placeMove(p1FirstMove[0], p1FirstMove[1], 'x')
+        self.gameboard.placeMove(p2FirstMove[0], p2FirstMove[1], '0')
+
             
 
     #getters and setters
@@ -59,6 +65,7 @@ class Game():
 
     def playGame(self):
         print("Starting Game")
+
         while(self.gameboard.terminal == False):
             # may have to check after each player moves if terminal is true. 
             self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
@@ -67,23 +74,25 @@ class Game():
             self.gameboard.printBoard()
             #print(self.moveSequence)
 
-        if(self.gameboard.winner == -1):
-            print("Player 1 won the game")
+        # if(self.gameboard.winner == 'x'):
+        #     print("Player 1 won the game")
         
-        elif(self.gameboard.winner == 1):
-            print("player 2 won the game")
+        # elif(self.gameboard.winner == '0'):
+        #     print("player 2 won the game")
         
-        elif(self.gameboard.winner == 0):
-            print("There was a tie")
+        # elif(self.gameboard.winner == 0):
+        #     print("There was a tie")
         
-        else:
-            print("Something went wrong")
+        # else:
+        #     print("Something went wrong")
 
-game1 = Game(1,1, 5, 4)
+#instructions say [3,4], for player 1, but not accoutning for 0
+#instctions say [3,3] for player 2, but not accounting for 0
+game1 = Game(2,4, [2,3], [2,2], 5, 6)
 print("Hello")
 game1.gameboard.printBoard()
-game1.gameboard.placeMove(1, 2, "x")
-game1.gameboard.printBoard()
-game1.gameboard.placeMove(2, 1, "o")
-game1.gameboard.printBoard()
+# game1.gameboard.placeMove(1, 2, "x")
+# game1.gameboard.printBoard()
+# game1.gameboard.placeMove(2, 1, "o")
+# game1.gameboard.printBoard()
 game1.playGame()
