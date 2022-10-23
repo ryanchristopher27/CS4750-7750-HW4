@@ -34,7 +34,9 @@ class Game():
         
         #place the moves
         self.gameboard.placeMove(p1FirstMove[0], p1FirstMove[1], 'x')
+        self.moveSequence.append(p1FirstMove)
         self.gameboard.placeMove(p2FirstMove[0], p2FirstMove[1], 'o')
+        self.moveSequence.append(p2FirstMove)
 
             
 
@@ -66,14 +68,28 @@ class Game():
     def playGame(self):
         print("Starting Game")
 
-        while(self.gameboard.terminal == False):
-            # may have to check after each player moves if terminal is true. 
-            self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
-            self.gameboard.printBoard()
-            self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
-            self.gameboard.printBoard()
-            #print(self.moveSequence)
+        # while(self.gameboard.terminal == False):
+        #     # may have to check after each player moves if terminal is true. 
+        #     self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
+        #     self.gameboard.printBoard()
+        #     self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
+        #     self.gameboard.printBoard()
+        #     #print(self.moveSequence)
 
+        count = 0
+        while (self.gameboard.terminal == False):
+            if (count % 2) == 0:
+                self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
+            else:
+                self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
+
+            count += 1
+
+            print("\n\tRound:", count)
+            self.gameboard.printBoard()
+
+        print(self.moveSequence)
+        
         if(self.gameboard.winner == 'x'):
             print("Player 1 won the game")
         
@@ -86,9 +102,9 @@ class Game():
         else:
             print("Something went wrong")
 
-#instructions say [3,4], for player 1, but not accoutning for 0
+#instructions say [3,4], for player 1, but not accounting for 0
 #instctions say [3,3] for player 2, but not accounting for 0
-game1 = Game(2, 4, [2,3], [2,2], 5, 6)
+game1 = Game(2, 4, (2,3), (2,2), 5, 6)
 print("Hello")
 game1.gameboard.printBoard()
 # game1.gameboard.placeMove(1, 2, "x")

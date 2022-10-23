@@ -157,13 +157,13 @@ def minimax(node, isMax):
         elif node.state.winner != node.currentPlayer:
             return 1000
     
-    if( node.movesLeft == 0):
+    if node.movesLeft == 0:
         # return (utility(node), node.move) 
         # print(node.move, " ", utility(node))
         return utility(node)
         
     # while(node.movesLeft != 0):
-    if(isMax):
+    if isMax:
         best = -1000
         node.expand()
         for child in node.children:
