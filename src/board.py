@@ -84,7 +84,7 @@ class GameBoard(object):
 
     #this determins how many openings are on the board for either X or O player and determines a winner if there is one
     def determineMove(self, xo):
-        self.clearSideOpens()
+        # self.clearSideOpens()
         if self.winner == 0:
             self.checkRow(xo)
         if self.winner == 0:

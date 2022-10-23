@@ -79,7 +79,7 @@ class Game():
         else:
             print("Something went wrong")
 
-game1 = Game(1,1, 5, 4)
+game1 = Game(2,2, 5, 4)
 print("Hello")
 game1.gameboard.printBoard()
 game1.gameboard.placeMove(1, 2, "x")
