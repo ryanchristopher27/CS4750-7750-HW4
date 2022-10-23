@@ -96,7 +96,8 @@ class Node:
                     newBoard = GameBoard(self.state.rowCount, self.state.colCount)
                     newBoard.setNewBoard(self.state)
                     # newBoard = GameBoard(self.state)
-                    newBoard.board[row][col] = self.currentPlayer
+                    # newBoard.board[row][col] = self.currentPlayer
+                    newBoard.placeMove(row, col, self.currentPlayer)
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
                     if self.currentPlayer == "x":
                         self.children.append(Node(newBoard, (row, col), "o", self.movesLeft-1))
