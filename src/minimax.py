@@ -95,7 +95,8 @@ class Node:
                     newBoard = GameBoard(self.state.rowCount, self.state.colCount)
                     newBoard.setNewBoard(self.state)
                     # newBoard = GameBoard(self.state)
-                    newBoard.board[row][col] = self.currentPlayer
+                    newBoard.placeMove(row, col, self.currentPlayer)
+                    # newBoard.board[row][col] = self.currentPlayer
                     #state of child has the possible node filled, the move that would get to that state, and is one more move down the tree
                     if self.currentPlayer == "x":
                         self.children.append(Node(newBoard, (row, col), "o", self.movesLeft-1))
@@ -129,7 +130,7 @@ def tieBreakMoves(moves):
 
     return bestMove
     
-
+    # rootNode.movesLeft = rootNode.movesLeft - 1
         
 #minimax search
 #state = current gameboard
@@ -141,33 +142,99 @@ def minimaxSearch(state, xo, plyCount):
     #root node
     #on first expansion will be of turn xo
     root = Node(state, None, xo, plyCount)
-    vMove = maxValueSearch(root)
-    state.placeMove(vMove[1][0], vMove[1][1], xo)
+    vMove = findBestMove(root)
+    state.placeMove(vMove[0], vMove[1], xo)
     # return (vMove[0], vMove[1].move)
     return vMove #(value, move)
 
-def maxValueSearch(node):
+def minimax(node, isMax):
 
-    if node.state.terminal == True:
-        if node.state.winner == "x" or node.state.winner == "o":
-            if node.state.winner != node.nextTurn:
-            # if node.state.winner == node.nextTurn * -1:
-                return -1000
-            elif node.state.winner == node.nextTurn:
-                return 1000
-        else:
-            return 0
+    #checking if there is a winner and if there are moves left
+    if node.state.winner == "x" or node.state.winner == "o":
+        if node.state.winner == node.currentPlayer:
+        # if node.state.winner == node.nextTurn * -1:
+            return -1000
+        elif node.state.winner != node.currentPlayer:
+            return 1000
+    
+    if( node.movesLeft == 0):
+        # return (utility(node), node.move) 
+        # print(node.move, " ", utility(node))
+        return utility(node)
+        
+    # while(node.movesLeft != 0):
+    if(isMax):
+        best = -1000
+        node.expand()
+        for child in node.children:
+            best = max(best, minimax(child, not isMax))
+            # best = max(best, minimax(child, not isMax))
+        # print(best, " best")
+        return best
+    else :
+        best = 1000
+        node.expand()
+        for child in node.children:
+            # minimax(child, not isMax)
+            best = min(best, minimax(child, not isMax))
+        # print(best, " best")
+        return best
 
-    if node.movesLeft == 0:
-        return (utility(node), node.move)
+def findBestMove(node) :
+    bestVal = -100
+    bestMove = (-1,-1)
+    moves = []
 
     node.expand()
-    largest = -1000
-    v = -1000
-    moves = []
-    move = None
     for child in node.children:
-        v = minValueSearch(child)[0]
+        moveVal = minimax(child, False) 
+
+        if moveVal > bestVal :
+            # bestMove = child.move
+            bestVal = moveVal
+            moves = []
+            moves.append(child.move)
+        if moveVal == bestVal:
+            moves.append(child.move)
+
+    # tie break all moves with smallest value
+    if len(moves) > 1:
+        bestMove = tieBreakMoves(moves)
+
+    return bestMove
+
+# def maxValueSearch(node):
+
+#     if node.state.terminal == True:
+#         if node.state.winner == "x" or node.state.winner == "o":
+#             if node.state.winner != node.nextTurn:
+#             # if node.state.winner == node.nextTurn * -1:
+#                 return -1000
+#             elif node.state.winner == node.nextTurn:
+#                 return 1000
+#         else:
+#             return 0
+
+#     if node.movesLeft == 0:
+#         return (utility(node), node.move)
+
+#     #current move
+#     node.expand()
+
+#     #has to expand all possible moves before looking at hursitc values
+#     currentNode = node.children
+#     while(node.movesLeft != 0):
+#         for children in currentNode:
+#             child.expend
+
+
+#     largest = -1000
+#     v = -1000
+#     moves = []
+#     move = None
+#     for child in node.children:
+#         child.expand()
+        # v = minValueSearch(child)[0]
         # child.state.determineMove(child.currentPlayer)
         # v = utility(child.state)
         # v = maxValueSearch(child.state)
@@ -176,57 +243,57 @@ def maxValueSearch(node):
         #     move = child.move
             # move = child
 
-        if v >= largest:
-            v = largest
-            moves.append(child.move)
+        # if v >= largest:
+        #     v = largest
+        #     moves.append(child.move)
 
     # tie break all moves with smallest value
-    if len(moves) > 1:
-        move = tieBreakMoves(moves)
-    else:
-        move = moves
+    # if len(moves) > 1:
+    #     move = tieBreakMoves(moves)
+    # else:
+    #     move = moves
 
-    return (v, move)
+    # return (v, move)
     # return (v, child)
 
-def minValueSearch(node):
+# def minValueSearch(node):
 
-    if node.state.terminal == True:
-        if node.state.winner == "x" or node.state.winner == "o":
-            if node.state.winner != node.nextTurn:
-            # if node.state.winner == node.nextTurn * -1:
-                return -1000
-            elif node.state.winner == node.nextTurn:
-                return 1000
-        else:
-            return 0
+#     if node.state.terminal == True:
+#         if node.state.winner == "x" or node.state.winner == "o":
+#             if node.state.winner != node.nextTurn:
+#             # if node.state.winner == node.nextTurn * -1:
+#                 return -1000
+#             elif node.state.winner == node.nextTurn:
+#                 return 1000
+#          else:
+    #         return 0
 
-    if node.movesLeft == 0:
-        return (utility(node), node.move)
+    # if node.movesLeft == 0:
+    #     return (utility(node), node.move)
 
-    node.expand()
-    smallest = 1000
-    v = 1000
-    move = None
-    moves = []
-    for child in node.children:
-        v = maxValueSearch(child)[0]
-        # child.state.determineMove(child.currentPlayer)
-        # v = utility(maxValueSearch(child.state))
-        # if v < smallest:
-        #     v = smallest
-        #     move = child.move
-        if v <= smallest:
-            v = smallest
-            moves.append(child.move)
+    # node.expand()
+    # smallest = 1000
+    # v = 1000
+    # move = None
+    # moves = []
+    # for child in node.children:
+    #     v = maxValueSearch(child)[0]
+    #     # child.state.determineMove(child.currentPlayer)
+    #     # v = utility(maxValueSearch(child.state))
+    #     # if v < smallest:
+    #     #     v = smallest
+    #     #     move = child.move
+    #     if v <= smallest:
+    #         v = smallest
+    #         moves.append(child.move)
 
-    # tie break all moves with smallest value
-    if len(moves) > 1:
-        move = tieBreakMoves(moves)
-    else:
-        move = moves
+    # # tie break all moves with smallest value
+    # if len(moves) > 1:
+    #     move = tieBreakMoves(moves)
+    # else:
+    #     move = moves
 
-    return (v, move)
+    # return (v, move)
 
 #calculates the hueristic using a gameboard and who is interested (X or O)
 def utility(node):
@@ -252,17 +319,22 @@ def utility(node):
         hn += 5*(gameBoard.oneSideOpen2forO) - 2*(gameBoard.oneSideOpen2forX)
     return hn
 
+def testExpandNodes():
+    state = GameBoard(5,4)
+    state.placeMove(1,1,'x')
+    state.placeMove(0,1, 'x')
+    state.placeMove(1,0,'x')
+    state.placeMove(0,0, 'o')
+    state.placeMove(3,3, 'o')
 
-
-
+    root = Node(state, None, 'x', 3)
+    bestMove = findBestMove(root)
+    # print(bestMove)
+    # root.expand()
+    # expandLookAhead(root)
 
 
 
     
-
-
-
-
     
-    
-    
+# testExpandNodes()

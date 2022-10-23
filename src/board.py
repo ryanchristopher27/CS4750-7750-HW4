@@ -101,6 +101,8 @@ class GameBoard(object):
             self.newDiag3Check(xo)
         if self.winner == 0:
             self.newDiag4Check(xo)  
+        if self.winner == xo:
+            self.terminal = True
 
 
     #checks the bounds of the indexes to make sure they are legal

@@ -34,7 +34,7 @@ class Game():
         
         #place the moves
         self.gameboard.placeMove(p1FirstMove[0], p1FirstMove[1], 'x')
-        self.gameboard.placeMove(p2FirstMove[0], p2FirstMove[1], '0')
+        self.gameboard.placeMove(p2FirstMove[0], p2FirstMove[1], 'o')
 
             
 
@@ -74,21 +74,21 @@ class Game():
             self.gameboard.printBoard()
             #print(self.moveSequence)
 
-        # if(self.gameboard.winner == 'x'):
-        #     print("Player 1 won the game")
+        if(self.gameboard.winner == 'x'):
+            print("Player 1 won the game")
         
-        # elif(self.gameboard.winner == '0'):
-        #     print("player 2 won the game")
+        elif(self.gameboard.winner == 'o'):
+            print("player 2 won the game")
         
-        # elif(self.gameboard.winner == 0):
-        #     print("There was a tie")
+        elif(self.gameboard.winner == 0):
+            print("There was a tie")
         
-        # else:
-        #     print("Something went wrong")
+        else:
+            print("Something went wrong")
 
 #instructions say [3,4], for player 1, but not accoutning for 0
 #instctions say [3,3] for player 2, but not accounting for 0
-game1 = Game(2,4, [2,3], [2,2], 5, 6)
+game1 = Game(2, 4, [2,3], [2,2], 5, 6)
 print("Hello")
 game1.gameboard.printBoard()
 # game1.gameboard.placeMove(1, 2, "x")
