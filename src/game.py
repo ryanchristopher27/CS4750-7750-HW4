@@ -2,6 +2,7 @@
 from board import GameBoard
 from minimax import minimaxSearch
 from player import Player
+import time
 
 class Game():
 
@@ -23,7 +24,7 @@ class Game():
 
     def __init__(self, p1MovesAhead, p2MovesAhead, p1FirstMove, p2FirstMove, boardRowSize, boardColSize):
         # generate board    
-        print(boardRowSize, " ", boardColSize)
+        # print(boardRowSize, " ", boardColSize)
         self.gameboard = GameBoard(boardRowSize, boardColSize)
         
         # set player 1
@@ -67,28 +68,34 @@ class Game():
 
     def playGame(self):
         print("Starting Game")
-
-        # while(self.gameboard.terminal == False):
-        #     # may have to check after each player moves if terminal is true. 
-        #     self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
-        #     self.gameboard.printBoard()
-        #     self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
-        #     self.gameboard.printBoard()
-        #     #print(self.moveSequence)
-
+        totalNodes = 0
         count = 0
         while (self.gameboard.terminal == False):
+            nodesGenerated = 0
             if (count % 2) == 0:
-                self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
+                mm, nodesGenerated = minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead)
+                self.addMoveSequence(mm)
+                # self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player1.playerSymbol, self.player1.movesAhead))
             else:
-                self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
+                mm, nodesGenerated = minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead)
+                self.addMoveSequence(mm)
+                # self.addMoveSequence(minimaxSearch(self.getGameBoard(), self.player2.playerSymbol, self.player2.movesAhead))
+            
+            print("Turn Nodes Generated:", nodesGenerated)
 
+            totalNodes += nodesGenerated
             count += 1
 
             print("\n\tRound:", count)
             self.gameboard.printBoard()
 
-        print(self.moveSequence)
+        print("\n------ Final Game Board ------")
+        for row in self.gameboard.board:
+            print(row)
+
+        print("Move Sequence:", self.moveSequence)
+
+        print("Total Nodes Generated:", totalNodes)
         
         if(self.gameboard.winner == 'x'):
             print("Player 1 won the game")
@@ -102,13 +109,17 @@ class Game():
         else:
             print("Something went wrong")
 
-#instructions say [3,4], for player 1, but not accounting for 0
-#instctions say [3,3] for player 2, but not accounting for 0
-game1 = Game(2, 4, (2,3), (2,2), 5, 6)
-print("Hello")
-game1.gameboard.printBoard()
-# game1.gameboard.placeMove(1, 2, "x")
-# game1.gameboard.printBoard()
-# game1.gameboard.placeMove(2, 1, "o")
-# game1.gameboard.printBoard()
-game1.playGame()
+def play():
+    #instructions say [3,4], for player 1, but not accounting for 0
+    #instctions say [3,3] for player 2, but not accounting for 0
+    game1 = Game(2, 4, (2,3), (2,2), 5, 6)
+    print("Hello")
+    game1.gameboard.printBoard()
+    # game1.gameboard.placeMove(1, 2, "x")
+    # game1.gameboard.printBoard()
+    # game1.gameboard.placeMove(2, 1, "o")
+    # game1.gameboard.printBoard()
+    timer1 = time.perf_counter()
+    game1.playGame()
+    timer2 = time.perf_counter()
+    print("Run Time:", "{:.4f}".format(timer2 - timer1), "seconds")

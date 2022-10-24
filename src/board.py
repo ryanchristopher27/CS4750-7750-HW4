@@ -54,7 +54,7 @@ class GameBoard(object):
         self.oneSideOpen2forO = gameBoard.oneSideOpen2forO
 
     def printBoard(self):
-        print("--- Current Game Board ---")
+        print("----- Current Game Board -----")
         for row in self.board:
             print(row)
 
@@ -84,7 +84,7 @@ class GameBoard(object):
 
     #this determins how many openings are on the board for either X or O player and determines a winner if there is one
     def determineMove(self, xo):
-        self.clearSideOpens()
+        # self.clearSideOpens()
         if self.winner == 0:
             self.checkRow(xo)
         if self.winner == 0:
@@ -279,10 +279,10 @@ class GameBoard(object):
         leftDownOpen = False
         rightUpOpen = False
 
-        for rowCount in range(2, self.rowCount - 1):
+        for rowCount in range(2, self.rowCount):
             col = 0
             row = rowCount
-            while col <= row and row <= self.colCount - 1:
+            while col <= self.colCount - 1 and row >= 0:
                 #if the pattern matches
                 if self.board[row][col] == xo:
                     numConsec += 1
@@ -372,7 +372,7 @@ class GameBoard(object):
         leftUpOpen = False
         rightDownOpen = False
 
-        for rowCount in range(self.rowCount - 1):
+        for rowCount in range(self.rowCount):
 
             col = 0
             row = rowCount

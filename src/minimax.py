@@ -142,52 +142,65 @@ def minimaxSearch(state, xo, plyCount):
     #root node
     #on first expansion will be of turn xo
     root = Node(state, None, xo, plyCount)
-    vMove = findBestMove(root)
+    vMove, nodesGenerated = findBestMove(root)
     state.placeMove(vMove[0], vMove[1], xo)
     # return (vMove[0], vMove[1].move)
-    return vMove #(value, move)
+    return vMove, nodesGenerated #(value, move)
 
-def minimax(node, isMax):
+# This functions runs minimax recursively until the final level is reached
+# it returns the best heuristic value calculated
+def minimax(node, isMax, ng):
+
+    nodesGenerated = ng
 
     #checking if there is a winner and if there are moves left
     if node.state.winner == "x" or node.state.winner == "o":
         if node.state.winner == node.currentPlayer:
         # if node.state.winner == node.nextTurn * -1:
-            return -1000
+            return -1000, nodesGenerated
         elif node.state.winner != node.currentPlayer:
-            return 1000
+            return 1000, nodesGenerated
     
     if node.movesLeft == 0:
         # return (utility(node), node.move) 
         # print(node.move, " ", utility(node))
-        return utility(node)
+        return utility(node), nodesGenerated
         
     # while(node.movesLeft != 0):
     if isMax:
         best = -1000
         node.expand()
+        nodesGenerated += len(node.children)
         for child in node.children:
-            best = max(best, minimax(child, not isMax))
+            mm, nodesGenerated = minimax(child, not isMax, nodesGenerated)
+            best = max(best, mm)
+            # best = max(best, minimax(child, not isMax))
             # best = max(best, minimax(child, not isMax))
         # print(best, " best")
-        return best
+        return best, nodesGenerated
     else :
         best = 1000
         node.expand()
+        nodesGenerated += len(node.children)
         for child in node.children:
             # minimax(child, not isMax)
-            best = min(best, minimax(child, not isMax))
+            mm, nodesGenerated = minimax(child, not isMax, nodesGenerated)
+            best = min(best, mm)
+            # best = min(best, minimax(child, not isMax))
         # print(best, " best")
-        return best
+        return best, nodesGenerated
 
+# This function finds the best move given the root node
 def findBestMove(node) :
     bestVal = -100
     bestMove = (-1,-1)
     moves = []
+    nodesGenerated = 1
 
     node.expand()
+    nodesGenerated += len(node.children)
     for child in node.children:
-        moveVal = minimax(child, False) 
+        moveVal, nodesGenerated = minimax(child, False, nodesGenerated) 
 
         if moveVal > bestVal :
             # bestMove = child.move
@@ -201,7 +214,7 @@ def findBestMove(node) :
     if len(moves) > 1:
         bestMove = tieBreakMoves(moves)
 
-    return bestMove
+    return bestMove, nodesGenerated
 
 # def maxValueSearch(node):
 
@@ -298,7 +311,9 @@ def findBestMove(node) :
 #calculates the hueristic using a gameboard and who is interested (X or O)
 def utility(node):
     gameBoard = node.state
-    gameBoard.determineMove(node.currentPlayer)
+    gameBoard.clearSideOpens()
+    gameBoard.determineMove("o")
+    gameBoard.determineMove("x")
     # xo = node.nextTurn * -1
     # xo = "x"
     # if node.currentPlayer == "x":
